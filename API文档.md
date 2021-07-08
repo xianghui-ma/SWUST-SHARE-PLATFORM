@@ -37,6 +37,38 @@
 
 > 注册的时候不上传头像，注册成功后才上传头像
 
+# 登录 #
+
+`POST /api/user/login`
+
+请求体示例：
+
+```
+{
+  "user":{
+    "email": String,
+    "password": String
+  }
+}
+```
+
+必要字段`email`、`password`
+
+不需要身份认证
+
+请求返回：
+
+```
+{
+	"user": {
+		"email": String,
+		"token": String,
+		"username": String,
+		"avatar": String
+	}
+}
+```
+
 # 头像上传 #
 
 `PUT /api/avatar`
@@ -205,7 +237,7 @@
 - `?author=...`。返回指定作者的文章
 - `?limit=...`。指定返回文章的个数，默认10篇。在`账户管理`状态下直接返回`tag`和`author`限定的全部文章，不需要该参数
 
-在`账户管理`状态下需要身份认证，其他不需要身份认证
+不需要身份认证
 
 请求返回
 
@@ -842,4 +874,3 @@
   },...]
 }
 ```
-
