@@ -3,18 +3,20 @@
 const { Router } = require('express'),
     router = Router();
 
+const { issueCompetitionValidatorMiddleware, updateCompetitionValidatorMiddleware, deleteCompetitionValidatorMiddleware } = require('../validator/index');
+
 // 发布竞赛
-router.post('/', (req, res, next) => {
+router.post('/', issueCompetitionValidatorMiddleware, (req, res, next) => {
     res.send('发布竞赛');
 });
 
 // 修改竞赛
-router.put('/:id', (req, res, next) => {
+router.put('/:id', updateCompetitionValidatorMiddleware, (req, res, next) => {
     res.send('修改竞赛');
 });
 
 // 删除竞赛
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', deleteCompetitionValidatorMiddleware, (req, res, next) => {
     res.send('删除竞赛');
 });
 

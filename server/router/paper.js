@@ -3,23 +3,25 @@
 const { Router } = require('express'),
     router = Router();
 
+const { issuePaperValidatorMiddleware, updatePaperValidatorMiddleware, deletePaperValidatorMiddleware } = require('../validator/index');
+
 // 发布论文
-router.post('/',(req,res,next)=>{
+router.post('/', issuePaperValidatorMiddleware, (req, res, next) => {
     res.send('发布论文');
 });
 
 // 修改论文
-router.put('/:id',(req,res,next)=>{
+router.put('/:id', updatePaperValidatorMiddleware, (req, res, next) => {
     res.send('修改论文');
 });
 
 // 删除论文
-router.delete('/:id',(req,res,next)=>{
+router.delete('/:id', deletePaperValidatorMiddleware, (req, res, next) => {
     res.send('删除论文');
 });
 
 // 获取论文
-router.get('/',(req,res,next)=>{
+router.get('/', (req, res, next) => {
     res.send('获取论文');
 });
 

@@ -3,18 +3,20 @@
 const { Router } = require('express'),
     router = Router();
 
+const { issueBlogValidatorMiddleware, updateBlogValidatorMiddleware, deleteBlogValidatorMiddleware } = require('../validator/index');
+
 // 发布博文
-router.post('/', (req, res, next) => {
+router.post('/', issueBlogValidatorMiddleware, (req, res, next) => {
     res.send('发布博文');
 });
 
 // 修改博文
-router.put('/:id', (req, res, next) => {
+router.put('/:id', updateBlogValidatorMiddleware, (req, res, next) => {
     res.send('修改博文');
 });
 
 // 删除博文
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', deleteBlogValidatorMiddleware, (req, res, next) => {
     res.send('删除博文');
 });
 

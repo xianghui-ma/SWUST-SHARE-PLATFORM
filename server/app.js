@@ -9,8 +9,14 @@ const app = express();
 // 设置服务器端口
 const port = process.env.PORT || 3000;
 
+// 配置常用中间件
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}));
+
 // 创建集合并连接数据库
-require('./model/index');
+// require('./model/index');
 
 // 引入集成路由
 app.use('/api', webSitRouter);

@@ -1,6 +1,6 @@
-// blog的验证器链数组
+// 博文的验证器链数组
 
-const { body, isEmpty, param } = require('express-validator'),
+const { body, param, header } = require('express-validator'),
     { isValidObjectId } = require('mongoose'),
     { promisify } = require('util');
 
@@ -12,7 +12,7 @@ const verify = promisify(jwt.verify);
 
 // 提取公共验证器链
 const tokenIdentify = header('Authentication')//用户身份验证
-    .isEmpty()
+    .notEmpty()
     .withMessage('你没有提供身份认证字段')
     .bail()
     .custom(async token => {
@@ -23,13 +23,14 @@ const tokenIdentify = header('Authentication')//用户身份验证
         }
     });
 const idIdentify = param('id')//博文id验证
-    .isEmpty({ ignore_whitespace: true })
+    .notEmpty({ ignore_whitespace: true })
     .withMessage('博文id不能为空')
     .bail()
     .custom(id => {
         if (!isValidObjectId(id)) {
             throw new Error('博文id格式错误');
         }
+        return true;
     });
 
 // 发布博文验证器链数组
@@ -38,7 +39,7 @@ exports.issueBlogValidator = [
 
     // 验证title
     body('article.title')
-        .isEmpty({ ignore_whitespace: true })
+        .notEmpty()
         .withMessage('博文标题不能为空')
         .bail()
         .isString()
@@ -46,13 +47,14 @@ exports.issueBlogValidator = [
 
     // 验证author
     body('article.author')
-        .isEmpty({ ignore_whitespace: true })
+        .notEmpty({ ignore_whitespace: true })
         .withMessage('博文作者不能为空')
         .bail()
         .custom(author => {
             if (!isValidObjectId(author)) {
                 throw new Error('作者id格式错误');
             }
+            return true;
         }),
 
     // 验证tagList数组

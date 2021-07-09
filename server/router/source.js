@@ -3,18 +3,20 @@
 const { Router } = require('express'),
     router = Router();
 
+const { issueSourceValidatorMiddleware, deleteSourceValidatorMiddleware, updateSourceValidatorMiddleware } = require('../validator/index');
+
 // 发布网站链接和工具下载
-router.post('/', (req, res, next) => {
+router.post('/', issueSourceValidatorMiddleware, (req, res, next) => {
     res.send('发布网站链接和工具下载');
 });
 
 // 修改网站链接和工具下载
-router.put('/:id', (req, res, next) => {
+router.put('/:id', updateSourceValidatorMiddleware, (req, res, next) => {
     res.send('修改网站链接和工具下载');
 });
 
 // 删除网站链接和工具下载
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', deleteSourceValidatorMiddleware, (req, res, next) => {
     res.send('删除网站链接和工具下载');
 });
 
