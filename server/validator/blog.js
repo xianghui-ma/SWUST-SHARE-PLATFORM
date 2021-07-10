@@ -1,27 +1,12 @@
 // 博文的验证器链数组
 
-const { body, param, header } = require('express-validator'),
-    { isValidObjectId } = require('mongoose'),
-    { promisify } = require('util');
+const { body, param } = require('express-validator'),
+    { isValidObjectId } = require('mongoose');
 
-const { secretOrPublicKey } = require('../config/websitConfig'),
-    jwt = require('jsonwebtoken');
-
-// promise化jsonwebtoken中的verify
-const verify = promisify(jwt.verify);
+const { tokenIdentify } = require('./commonItem'),
+{blogCollection}=require('../model/index');
 
 // 提取公共验证器链
-const tokenIdentify = header('Authentication')//用户身份验证
-    .notEmpty()
-    .withMessage('你没有提供身份认证字段')
-    .bail()
-    .custom(async token => {
-        try {
-            await verify(token, secretOrPublicKey);
-        } catch (error) {
-            return Promise.reject('用户身份认证失败');
-        }
-    });
 const idIdentify = param('id')//博文id验证
     .notEmpty({ ignore_whitespace: true })
     .withMessage('博文id不能为空')
@@ -55,6 +40,13 @@ exports.issueBlogValidator = [
                 throw new Error('作者id格式错误');
             }
             return true;
+        })
+        .bail()
+        .custom(async author=>{
+            let user = await blogCollection.findById(author).exec();
+            if(!user){
+                return Promise.reject('博文作者不存在');
+            }
         }),
 
     // 验证tagList数组

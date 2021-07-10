@@ -22,6 +22,6 @@ module.exports = Schema({
     avatar: {//头像URL
         type: String,
         require: true,
-        default: null
+        default: ''
     }
 });

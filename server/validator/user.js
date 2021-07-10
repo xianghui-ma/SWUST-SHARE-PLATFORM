@@ -1,27 +1,11 @@
 // 用户的验证器链数组
 
-const { body, header } = require('express-validator'),
-    { isValidObjectId } = require('mongoose'),
-    { promisify } = require('util');
+const { body } = require('express-validator'),
+    { isValidObjectId } = require('mongoose');
 
-const { secretOrPublicKey } = require('../config/websitConfig'),
-    jwt = require('jsonwebtoken');
-
-// promise化jsonwebtoken中的verify
-const verify = promisify(jwt.verify);
+const { tokenIdentify } = require('./commonItem');
 
 // 提取公共验证器链
-const tokenIdentify = header('Authentication')//用户身份验证
-    .notEmpty()
-    .withMessage('你没有提供身份认证字段')
-    .bail()
-    .custom(async token => {
-        try {
-            await verify(token, secretOrPublicKey);
-        } catch (error) {
-            return Promise.reject('用户身份认证失败');
-        }
-    });
 const emailIdentify = body('user.email')//用户邮箱验证
     .notEmpty({ ignore_whitespace: true })
     .withMessage('邮箱不能为空')
